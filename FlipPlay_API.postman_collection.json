@@ -249,7 +249,30 @@
 					}
 				},
 				{
-					"name": "3.2 Store User Baru",
+					"name": "3.2 List Users Beserta Koleksinya",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users?include_collection=true",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users"],
+							"query": [
+								{
+									"key": "include_collection",
+									"value": "true"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "3.3 Store User Baru",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -274,7 +297,7 @@
 					}
 				},
 				{
-					"name": "3.3 Show User Detail",
+					"name": "3.4 Show User Detail",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -291,7 +314,7 @@
 					}
 				},
 				{
-					"name": "3.4 Delete User",
+					"name": "3.5 Delete User",
 					"request": {
 						"method": "DELETE",
 						"header": [

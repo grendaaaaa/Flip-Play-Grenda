@@ -12,11 +12,18 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
-     * Menampilkan daftar semua user.
+     * Menampilkan daftar semua user (bisa dengan query ?include_collection=true).
      */
-    public function index(): JsonResponse
+    public function index(\Illuminate\Http\Request $request): JsonResponse
     {
-        $users = User::withCount('media')->get();
+        $query = User::withCount('media');
+
+        // Jika client meminta menyertakan daftar koleksinya
+        if ($request->boolean('include_collection')) {
+            $query->with('media');
+        }
+
+        $users = $query->get();
 
         return response()->json([
             'success' => true,

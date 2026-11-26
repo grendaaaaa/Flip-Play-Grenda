@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'collections_count' => $this->whenCounted('media'),
+            'collection' => MediaResource::collection($this->whenLoaded('media')),
             'created_at' => $this->created_at?->toIso8601String(),
         ];
     }
