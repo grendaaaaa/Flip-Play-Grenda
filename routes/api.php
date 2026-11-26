@@ -2,31 +2,27 @@
 
 use App\Http\Controllers\Api\CollectionController;
 use App\Http\Controllers\Api\MediaController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes for FlipPlay
+| Rute API FlipPlay
 |--------------------------------------------------------------------------
 */
 
-// Standar CRUD Media Endpoints
+// CRUD Master Media
 Route::apiResource('media', MediaController::class);
 
-// Manajemen Pengguna (Users)
-Route::get('users', [App\Http\Controllers\Api\UserController::class, 'index'])->name('users.index');
-Route::post('users', [App\Http\Controllers\Api\UserController::class, 'store'])->name('users.store');
-Route::get('users/{id}', [App\Http\Controllers\Api\UserController::class, 'show'])->name('users.show');
-Route::delete('users/{id}', [App\Http\Controllers\Api\UserController::class, 'destroy'])->name('users.destroy');
+// Manajemen Pengguna
+Route::get('users', [UserController::class, 'index'])->name('users.index');
+Route::post('users', [UserController::class, 'store'])->name('users.store');
+Route::get('users/{id}', [UserController::class, 'show'])->name('users.show');
+Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
-// Custom Actions: User Media Collections
+// Custom Actions: Relasi Koleksi Media Pengguna
 Route::prefix('users/{userId}/collection')->group(function () {
-    // 1. Menampilkan koleksi media seorang pengguna
-    Route::get('/', [CollectionController::class, 'index'])->name('users.collection.index');
-
-    // 2. Menambahkan media ke dalam koleksi pengguna
-    Route::post('/', [CollectionController::class, 'addMedia'])->name('users.collection.store');
-
-    // 3. Menghapus media dari koleksi pengguna
-    Route::delete('/{mediaId}', [CollectionController::class, 'removeMedia'])->name('users.collection.destroy');
+    Route::get('/', [CollectionController::class, 'index'])->name('users.collection.index');          // Tampilkan koleksi pengguna
+    Route::post('/', [CollectionController::class, 'addMedia'])->name('users.collection.store');       // Tambah media ke koleksi
+    Route::delete('/{mediaId}', [CollectionController::class, 'removeMedia'])->name('users.collection.destroy'); // Hapus media dari koleksi
 });

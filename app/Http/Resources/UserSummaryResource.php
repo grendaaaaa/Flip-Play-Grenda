@@ -7,11 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserSummaryResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+    // Ringkasan data pengguna saat ditampilkan di detail media
     public function toArray(Request $request): array
     {
         return [

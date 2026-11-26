@@ -14,12 +14,9 @@ use Illuminate\Notifications\Notifiable;
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The media items in the user's collection.
-     */
+    // Relasi Many-to-Many: User memiliki banyak media di koleksinya
     public function media(): BelongsToMany
     {
         return $this->belongsToMany(Media::class, 'media_user')
@@ -27,11 +24,6 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [

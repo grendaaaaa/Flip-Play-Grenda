@@ -8,19 +8,12 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AddToCollectionRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+    // Aturan validasi tambah koleksi
     public function rules(): array
     {
         return [
@@ -31,6 +24,7 @@ class AddToCollectionRequest extends FormRequest
         ];
     }
 
+    // Pesan error validasi
     public function messages(): array
     {
         return [
@@ -41,6 +35,7 @@ class AddToCollectionRequest extends FormRequest
         ];
     }
 
+    // Format respon JSON jika validasi gagal (HTTP 422)
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

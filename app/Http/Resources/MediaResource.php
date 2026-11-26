@@ -7,11 +7,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class MediaResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+    // Format JSON media
     public function toArray(Request $request): array
     {
         return [
@@ -23,7 +19,7 @@ class MediaResource extends JsonResource
             'duration_minutes' => $this->duration_minutes,
             'rating' => (float) $this->rating,
             'description' => $this->description,
-            // Custom collection metadata when loaded via pivot
+            // Munculkan data pivot hanya saat dipanggil dari relasi koleksi
             'pivot_data' => $this->whenPivotLoaded('media_user', function () {
                 return [
                     'status' => $this->pivot->status,
@@ -32,7 +28,7 @@ class MediaResource extends JsonResource
                     'added_at' => $this->pivot->created_at?->toIso8601String(),
                 ];
             }),
-            // Included collectors when eager loaded
+            // Munculkan daftar pengguna hanya saat eager-load ('users')
             'collectors' => UserSummaryResource::collection($this->whenLoaded('users')),
             'collectors_count' => $this->whenCounted('users'),
             'created_at' => $this->created_at?->toIso8601String(),

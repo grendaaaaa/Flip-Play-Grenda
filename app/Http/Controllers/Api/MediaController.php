@@ -13,44 +13,38 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class MediaController extends Controller
 {
-    /**
-     * Display a listing of media with optional search and filters.
-     */
+    // Ambil daftar media (dukung pencarian judul, filter tipe/genre, & urutan)
     public function index(Request $request): AnonymousResourceCollection
     {
         $query = Media::query()->withCount('users');
 
-        // Filter pencarian berdasarkan judul
+        // Filter judul
         if ($request->filled('search')) {
             $searchTerm = $request->query('search');
             $query->where('title', 'like', "%{$searchTerm}%");
         }
 
-        // Filter berdasarkan jenis media (Movie, Series, Anime, etc.)
+        // Filter tipe media
         if ($request->filled('type')) {
             $query->where('type', $request->query('type'));
         }
 
-        // Filter berdasarkan genre
+        // Filter genre
         if ($request->filled('genre')) {
             $query->where('genre', 'like', "%{$request->query('genre')}%");
         }
 
-        // Pengurutan
+        // Urutkan data
         $sortBy = $request->query('sort_by', 'created_at');
         $sortOrder = $request->query('order', 'desc');
         if (in_array($sortBy, ['title', 'rating', 'release_year', 'created_at'])) {
             $query->orderBy($sortBy, $sortOrder === 'asc' ? 'asc' : 'desc');
         }
 
-        $mediaList = $query->paginate($request->query('per_page', 10));
-
-        return MediaResource::collection($mediaList);
+        return MediaResource::collection($query->paginate($request->query('per_page', 10)));
     }
 
-    /**
-     * Store a newly created media in storage.
-     */
+    // Tambah media baru
     public function store(StoreMediaRequest $request): JsonResponse
     {
         $media = Media::create($request->validated());
@@ -64,9 +58,7 @@ class MediaController extends Controller
             ->setStatusCode(201);
     }
 
-    /**
-     * Display the specified media with its collectors (users).
-     */
+    // Tampilkan detail 1 media beserta pengguna yang mengoleksinya
     public function show(int $id): JsonResponse
     {
         $media = Media::with(['users'])->withCount('users')->find($id);
@@ -86,9 +78,7 @@ class MediaController extends Controller
             ->response();
     }
 
-    /**
-     * Update the specified media in storage.
-     */
+    // Update data media
     public function update(UpdateMediaRequest $request, int $id): JsonResponse
     {
         $media = Media::find($id);
@@ -110,9 +100,7 @@ class MediaController extends Controller
             ->response();
     }
 
-    /**
-     * Remove the specified media from storage.
-     */
+    // Hapus media dari sistem
     public function destroy(int $id): JsonResponse
     {
         $media = Media::find($id);

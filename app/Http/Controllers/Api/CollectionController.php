@@ -13,9 +13,7 @@ use Illuminate\Http\Request;
 
 class CollectionController extends Controller
 {
-    /**
-     * Menampilkan daftar seluruh media dalam koleksi pengguna tertentu.
-     */
+    // Tampilkan daftar koleksi media milik pengguna
     public function index(Request $request, int $userId): JsonResponse
     {
         $user = User::with(['media'])->find($userId);
@@ -35,9 +33,7 @@ class CollectionController extends Controller
             ->response();
     }
 
-    /**
-     * Custom Action: Menambahkan media ke dalam koleksi pribadi pengguna.
-     */
+    // Custom Action: Tambah/update media ke koleksi pengguna (attach / updateExistingPivot)
     public function addMedia(AddToCollectionRequest $request, int $userId): JsonResponse
     {
         $user = User::find($userId);
@@ -52,7 +48,6 @@ class CollectionController extends Controller
         $mediaId = $request->input('media_id');
         $media = Media::find($mediaId);
 
-        // Periksa apakah sudah ada di koleksi
         $alreadyInCollection = $user->media()->where('media_id', $mediaId)->exists();
 
         $pivotAttributes = [
@@ -61,19 +56,17 @@ class CollectionController extends Controller
             'personal_rating' => $request->input('personal_rating'),
         ];
 
+        // Jika sudah ada, perbarui datanya. Jika belum, tambahkan relasi baru
         if ($alreadyInCollection) {
-            // Update status & notes yang ada
             $user->media()->updateExistingPivot($mediaId, $pivotAttributes);
-            $message = "'{$media->title}' sudah ada di koleksi, data status/catatan berhasil diperbarui.";
+            $message = "'{$media->title}' sudah ada di koleksi, data berhasil diperbarui.";
             $statusCode = 200;
         } else {
-            // Pasang media ke user collection
             $user->media()->attach($mediaId, $pivotAttributes);
             $message = "'{$media->title}' berhasil ditambahkan ke koleksi {$user->name}.";
             $statusCode = 201;
         }
 
-        // Ambil data media terbaru beserta pivot datanya
         $collectedMedia = $user->media()->where('media_id', $mediaId)->first();
 
         return (new MediaResource($collectedMedia))
@@ -89,9 +82,7 @@ class CollectionController extends Controller
             ->setStatusCode($statusCode);
     }
 
-    /**
-     * Custom Action: Menghapus media dari koleksi pengguna.
-     */
+    // Custom Action: Hapus media dari koleksi pengguna (detach)
     public function removeMedia(int $userId, int $mediaId): JsonResponse
     {
         $user = User::find($userId);

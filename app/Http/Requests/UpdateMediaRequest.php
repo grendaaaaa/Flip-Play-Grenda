@@ -9,19 +9,12 @@ use Illuminate\Validation\Rule;
 
 class UpdateMediaRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
+    // Aturan validasi update media (judul unik selain dirinya sendiri)
     public function rules(): array
     {
         $mediaId = $this->route('medium') ?? $this->route('media');
@@ -46,9 +39,7 @@ class UpdateMediaRequest extends FormRequest
         ];
     }
 
-    /**
-     * Custom message for validation errors.
-     */
+    // Pesan error validasi
     public function messages(): array
     {
         return [
@@ -58,9 +49,7 @@ class UpdateMediaRequest extends FormRequest
         ];
     }
 
-    /**
-     * Handle failed validation and return consistent JSON format.
-     */
+    // Format respon JSON jika validasi gagal (HTTP 422)
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

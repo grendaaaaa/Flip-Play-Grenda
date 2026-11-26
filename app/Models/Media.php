@@ -10,14 +10,9 @@ class Media extends Model
 {
     use HasFactory;
 
-    /**
-     * Table associated with the model.
-     */
     protected $table = 'media';
 
-    /**
-     * Mass assignable attributes.
-     */
+    // Kolom yang boleh diisi massal
     protected $fillable = [
         'title',
         'type',
@@ -28,18 +23,14 @@ class Media extends Model
         'description',
     ];
 
-    /**
-     * Attribute casting.
-     */
+    // Konversi tipe data otomatis
     protected $casts = [
         'release_year' => 'integer',
         'duration_minutes' => 'integer',
         'rating' => 'float',
     ];
 
-    /**
-     * Users who have added this media to their collection.
-     */
+    // Relasi Many-to-Many: Media dikoleksi oleh banyak pengguna
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'media_user')
