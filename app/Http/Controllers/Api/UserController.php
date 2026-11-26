@@ -65,4 +65,27 @@ class UserController extends Controller
             ])
             ->response();
     }
+
+    /**
+     * Menghapus user dari FlipPlay (beserta koleksinya otomatis cascade).
+     */
+    public function destroy(int $id): JsonResponse
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengguna tidak ditemukan.',
+            ], 404);
+        }
+
+        $userName = $user->name;
+        $user->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => "Pengguna '{$userName}' berhasil dihapus dari sistem.",
+        ], 200);
+    }
 }

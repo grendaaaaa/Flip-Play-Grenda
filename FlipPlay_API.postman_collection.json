@@ -289,6 +289,23 @@
 							"path": ["api", "users", "1"]
 						}
 					}
+				},
+				{
+					"name": "3.4 Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/3",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "3"]
+						}
+					}
 				}
 			]
 		}

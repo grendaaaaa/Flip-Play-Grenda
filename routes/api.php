@@ -17,6 +17,7 @@ Route::apiResource('media', MediaController::class);
 Route::get('users', [App\Http\Controllers\Api\UserController::class, 'index'])->name('users.index');
 Route::post('users', [App\Http\Controllers\Api\UserController::class, 'store'])->name('users.store');
 Route::get('users/{id}', [App\Http\Controllers\Api\UserController::class, 'show'])->name('users.show');
+Route::delete('users/{id}', [App\Http\Controllers\Api\UserController::class, 'destroy'])->name('users.destroy');
 
 // Custom Actions: User Media Collections
 Route::prefix('users/{userId}/collection')->group(function () {
