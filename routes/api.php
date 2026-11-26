@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 // Standar CRUD Media Endpoints
 Route::apiResource('media', MediaController::class);
 
+// Manajemen Pengguna (Users)
+Route::get('users', [App\Http\Controllers\Api\UserController::class, 'index'])->name('users.index');
+Route::post('users', [App\Http\Controllers\Api\UserController::class, 'store'])->name('users.store');
+Route::get('users/{id}', [App\Http\Controllers\Api\UserController::class, 'show'])->name('users.show');
+
 // Custom Actions: User Media Collections
 Route::prefix('users/{userId}/collection')->group(function () {
     // 1. Menampilkan koleksi media seorang pengguna
